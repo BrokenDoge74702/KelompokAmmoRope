@@ -45,9 +45,7 @@ Ammo().then(function(Ammo) {
     }
 
     function initGraphics() {
-
         container = document.getElementById( 'container' );
-
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 2000 );
 
         scene = new THREE.Scene();
@@ -97,9 +95,6 @@ Ammo().then(function(Ammo) {
     }
 
     function initPhysics() {
-
-        // Physics configuration
-
         collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
         dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
         broadphase = new Ammo.btDbvtBroadphase();
@@ -152,13 +147,12 @@ Ammo().then(function(Ammo) {
 
         ropeGeometry.setIndex( new THREE.BufferAttribute( new Uint16Array( ropeIndices ), 1 ) );
         ropeGeometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( ropePositions ), 3 ) );
-        ropeGeometry.computeBoundingSphere();
         rope = new THREE.LineSegments( ropeGeometry, ropeMaterial );
         rope.castShadow = true;
         rope.receiveShadow = true;
         scene.add( rope );
 
-        // Rope physic object
+        // Rope physics object
         var softBodyHelpers = new Ammo.btSoftBodyHelpers();
         var ropeStart = new Ammo.btVector3( ropePos.x, ropePos.y, ropePos.z );
         var ropeEnd = new Ammo.btVector3( ropePos.x, ropePos.y + ropeLength, ropePos.z );
@@ -166,8 +160,7 @@ Ammo().then(function(Ammo) {
         var sbConfig = ropeSoftBody.get_m_cfg();
         sbConfig.set_viterations( 10 );
         sbConfig.set_piterations( 10 );
-        ropeSoftBody.setTotalMass( ropeMass, false )
-        Ammo.castObject( ropeSoftBody, Ammo.btCollisionObject ).getCollisionShape().setMargin( margin * 3 );
+        ropeSoftBody.setTotalMass( ropeMass, false );
         physicsWorld.addSoftBody( ropeSoftBody, 1, -1 );
         rope.userData.physicsBody = ropeSoftBody;
 
